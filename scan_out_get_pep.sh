@@ -1,11 +1,11 @@
-# read the linerazied fasta file 
-FASTA_file="reformatted_raw_orfs.fasta"
-INPUT_DATA="sample.dat"
-outputFASTA="retained_sequences.fasta"
-cutoffAA=60
-cutoffcharge=1
+
+FASTA_file="reformatted_raw_orfs.fasta"  # the fasta file
+INPUT_DATA="sample.dat"     # signalp output 
+outputFASTA="retained_sequences.fasta"  # output 
+cutoffAA=60   # cutoff for length
+cutoffcharge=1   # cutoff for charge
 # linearize
-#awk '/^>/ {printf("%s%s\t",(N>0?"\n":""),$0);N++;next;} {printf("%s",$0);} END {printf("\n");}' < $FASTA_file >temp.fasta
+awk '/^>/ {printf("%s%s\t",(N>0?"\n":""),$0);N++;next;} {printf("%s",$0);} END {printf("\n");}' < $FASTA_file >temp.fasta
 
 while read peptide; do
 echo $peptide >temp 
