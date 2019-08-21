@@ -22,8 +22,6 @@ process sample_genes {
 	}
 
 lines = subset_of_genes.splitText()
-//lines.subscribe { println it } 
-
 
 process slice_genes {
 	maxForks 50 
@@ -32,17 +30,16 @@ process slice_genes {
 	output: 
 		file ("*.vcf.gz") into sliced_vcf
 
-	publishDir params.outdir+"/", mode: 'copy', overwrite: 'true' 
 	"""
 	echo '$line' >mybedfile.bed 
 	gene_name=\$(awk {'print \$4'} mybedfile.bed)
         sed -i 's/ /\t/g' mybedfile.bed
 	chr_number=\$(awk {'print \$1'} mybedfile.bed )
 	vcf_to_splice=\$(ls "${params.VCF}"/*\$chr_number"${params.suffix}")
-	bcftools view \$vcf_to_splice  --regions-file mybedfile.bed  -O z -o \$gene_name.vcf.gz
+	bcftools view \$vcf_to_splice  --regions-file mybedfile.bed  -O z -o \$gene_name.sliced.vcf.gz
 	mv mybedfile.bed \$gene_name.bed 
 	
-	"""
+	"""	
 }
 
 // annotation with SnpEff 
@@ -51,19 +48,17 @@ process snpeff_annotation {
         input:
             file(vcf) from sliced_vcf
         output:
-             file("*_sneff.vcf.gz") into vcf_snpeff
+             file("*_ann.vcf.gz") into vcf_snpeff
              file("*.txt") into summary_text
-             file("*.html") into html_report
 	
 	publishDir "${params.outdir}", mode: 'copy'
 
 	"""
 	name=\$(basename $vcf *.vcf.gz)
 	out=\$(echo \$name"_sneff.vcf.gz") 
-        java -Xmx4g  -jar "${params.snpeff}"/snpEff.jar  hg19 -canon  $vcf   >\$out
-	mv *.html \$name".html"
+        java -Xmx4g  -jar "${params.snpeff}"/snpEff.jar  hg19 -canon -stats mystats  $vcf   > \$out"_ann.vcf.gz"
+	#mv *.html \$name".html"
 	mv *.txt \$name".txt"
 	       
         """
 }
-
