@@ -2,29 +2,26 @@
 
 gene_bed_file =Channel.fromPath("${params.gene_bed_file}")
 N = Channel.from( params.N ) 
-samples = Channel.fromPath("${params.sample_list}" )
 
 process sample_genes {
 
 	input: 
 		file(bed_file) from gene_bed_file
-		file(list_of_samples) from samples
 		val number from N
 	output: 
 		file("*.bed") into subset_of_genes
-		file("list_of_samples.txt") into clean_samples
 	
 	"""
 	echo $bed_file
 	shuf -n $number  $bed_file >subsample.bed
-	awk {'print \$1'} $list_of_samples  >list_of_samples.txt
 	"""
 	}
 
 lines = subset_of_genes.splitText()
+//lines.subscribe { println it } 
 
 process slice_genes {
-	maxForks 50 
+	maxForks 50
 	input:
 		val line from lines.flatMap() 
 	output: 
@@ -45,19 +42,22 @@ process slice_genes {
 // annotation with SnpEff 
 process snpeff_annotation {
 	maxForks 50
+	memory '4 GB'
+    	executor 'slurm'
         input:
             file(vcf) from sliced_vcf
         output:
              file("*_ann.vcf.gz") into vcf_snpeff
-             file("*.txt") into summary_text
+             file("*.csv") into summary_csv
+	     file("*.txt") into summary_txt
 	
-	publishDir "${params.outdir}", mode: 'copy'
+	publishDir "${params.outdir}", mode: 'move'
 
 	"""
 	name=\$(basename $vcf *.vcf.gz)
 	out=\$(echo \$name"_sneff.vcf.gz") 
-        java -Xmx4g  -jar "${params.snpeff}"/snpEff.jar  hg19 -canon -stats mystats  $vcf   > \$out"_ann.vcf.gz"
-	#mv *.html \$name".html"
+        java -Xmx4g  -jar "${params.snpeff}"/snpEff.jar  hg19 -canon -csvStats  mystats.csv -stats mystats  $vcf   > \$out"_ann.vcf.gz"
+	mv *.csv \$name".csv"
 	mv *.txt \$name".txt"
 	       
         """
