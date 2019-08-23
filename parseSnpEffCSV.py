@@ -11,6 +11,9 @@ import csv
 parser = argparse.ArgumentParser(description="arranges the text output file of SnPeff to include only the gene with canonical transcript. Assumes one gene per file")
 parser.add_argument("--snpeffCSV", help="SnpEff csv output file")
 parser.add_argument("--snpeffTXT", help="SnpEff text output file, assumes the name is in the following format <gene_name>.vcf.gz.txt")
+parser.add_argument("--out", help="CSV output file")
+parser.add_argument("--tag", help="tag to add to csv output")
+
 
 effects = {"gene_name":"Missing data", "transcript_id":"Missing data",  "DEL":"0", "INS":"0", "SNP":"0", "MISSENSE":"0", "SILENT":"0", "EXON":"0", "INTRON":"0","FRAME_SHIFT":"0", "START_GAINED":"0",
 "START_LOST":"0", "SYNONYMOUS_START":"0", "NON_SYNONYMOUS_START":"0", "STOP_GAINED":"0", "SYNONYMOUS_STOP":"0", "STOP_LOST":"0", "FRAMESHIFT_VARIANT":"0",
@@ -59,10 +62,12 @@ if __name__ == "__main__":
 	effects =  read_parse_txt(args.snpeffTXT)
 	lines = readOutput(args.snpeffCSV)
 	effects=parse(lines)
+	if args.tag != None: 
+		effects["tag"] = args.tag
 
 	toCSV = [effects]
 	keys = list(toCSV[0].keys() )
-	with open('people.csv', 'w') as output_file:
+	with open(args.out, 'w') as output_file:
 		dict_writer = csv.DictWriter(output_file, keys)
 		dict_writer.writeheader()
 		dict_writer.writerows( toCSV  )
