@@ -33,7 +33,8 @@ process slice_genes {
         sed -i 's/ /\t/g' mybedfile.bed
 	chr_number=\$(awk {'print \$1'} mybedfile.bed )
 	vcf_to_splice=\$(ls "${params.VCF}"/*\$chr_number"${params.suffix}")
-	bcftools view \$vcf_to_splice  --regions-file mybedfile.bed  -O z -o \$gene_name.sliced.vcf.gz
+	bcftools view \$vcf_to_splice  --regions-file mybedfile.bed  -O z -o output.vcf.gz
+	bcftools view output.vcf.gz -i 'MAF[0]!=0' -O z -o \$gene_name.sliced.vcf.gz
 	mv mybedfile.bed \$gene_name.bed 
 	
 	"""	
