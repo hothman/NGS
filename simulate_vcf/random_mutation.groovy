@@ -6,7 +6,7 @@
 */
 
 // reference genome file
-params.REFSEQ='/home/houcemeddine/BILIM/random_mutation'
+params.REFSEQ='./Path_to_fasta_ref_files'
 
 // mutation rate 
 params.MUTATUINRATE=0.1
