@@ -12,7 +12,7 @@ params.REFSEQ='./Path_to_fasta_ref_files'
 params.MUTATUINRATE=0.1
 
 // BED file 
-params.BED="/home/houcemeddine/BILIM/random_mutation/test.bed" 
+params.BED="./path_to_bed_file/test.bed" 
 folder_fasta = Channel.fromPath("$params.REFSEQ")
 bed_file = Channel.fromPath("$params.BED").splitText()
 
