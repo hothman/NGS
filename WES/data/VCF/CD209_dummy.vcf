@@ -1,0 +1,16 @@
+##fileformat=VCFv4.2
+##fileDate=20200427
+##source=vcfy 0.0.8
+##reference=/home/houcemeddine/BILIM/random_mutation/refgenome/Homo_sapiens.GRCh37.dna.chromosome.19.fa
+##phasing=none
+##commandline="vcfy -m 0.001 -r '19' -l 7804880 -h 7812464"
+##contig=<ID=19,length=59128983>
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+19	7805288	.	G	C	.	.	.
+19	7805844	.	C	G	.	.	.
+19	7808055	.	T	C	.	.	.
+19	7808239	.	T	G	.	.	.
+19	7809618	.	T	G	.	.	.
+19	7809795	.	T	C	.	.	.
+19	7810991	.	A	C	.	.	.
+19	7812072	.	C	G	.	.	.

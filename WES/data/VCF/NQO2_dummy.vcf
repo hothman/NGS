@@ -1,0 +1,26 @@
+##fileformat=VCFv4.2
+##fileDate=20200427
+##source=vcfy 0.0.8
+##reference=/home/houcemeddine/BILIM/random_mutation/refgenome/Homo_sapiens.GRCh37.dna.chromosome.6.fa
+##phasing=none
+##commandline="vcfy -m 0.001 -r '6' -l 3000049 -h 3020110"
+##contig=<ID=6,length=171115067>
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+6	3003985	.	A	T	.	.	.
+6	3004142	.	T	C	.	.	.
+6	3004481	.	G	C	.	.	.
+6	3004976	.	C	G	.	.	.
+6	3007090	.	T	G	.	.	.
+6	3008221	.	A	T	.	.	.
+6	3008760	.	G	A	.	.	.
+6	3008776	.	G	T	.	.	.
+6	3008877	.	G	T	.	.	.
+6	3009605	.	T	G	.	.	.
+6	3009745	.	G	A	.	.	.
+6	3009753	.	A	T	.	.	.
+6	3010685	.	C	A	.	.	.
+6	3012179	.	A	G	.	.	.
+6	3015221	.	C	A	.	.	.
+6	3016482	.	T	C	.	.	.
+6	3016959	.	A	G	.	.	.
+6	3018383	.	C	A	.	.	.

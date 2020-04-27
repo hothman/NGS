@@ -1,0 +1,16 @@
+##fileformat=VCFv4.2
+##fileDate=20200427
+##source=vcfy 0.0.8
+##reference=/home/houcemeddine/BILIM/random_mutation/refgenome/Homo_sapiens.GRCh37.dna.chromosome.9.fa
+##phasing=none
+##commandline="vcfy -m 0.001 -r '9' -l 90340973 -h 90346384"
+##contig=<ID=9,length=141213431>
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+9	90342011	.	A	C	.	.	.
+9	90342565	.	C	A	.	.	.
+9	90342984	.	A	C	.	.	.
+9	90343199	.	T	A	.	.	.
+9	90343454	.	T	C	.	.	.
+9	90344324	.	C	G	.	.	.
+9	90344884	.	T	C	.	.	.
+9	90345914	.	T	G	.	.	.

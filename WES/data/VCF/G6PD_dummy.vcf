@@ -1,0 +1,27 @@
+##fileformat=VCFv4.2
+##fileDate=20200427
+##source=vcfy 0.0.8
+##reference=/home/houcemeddine/BILIM/random_mutation/refgenome/Homo_sapiens.GRCh37.dna.chromosome.X.fa
+##phasing=none
+##commandline="vcfy -m 0.001 -r 'X' -l 153759604 -h 153775801"
+##contig=<ID=X,length=155270560>
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+X	153760255	.	T	A	.	.	.
+X	153761543	.	G	A	.	.	.
+X	153761690	.	G	A	.	.	.
+X	153761925	.	C	T	.	.	.
+X	153762722	.	C	G	.	.	.
+X	153764925	.	A	T	.	.	.
+X	153765189	.	G	A	.	.	.
+X	153765377	.	A	T	.	.	.
+X	153766795	.	T	C	.	.	.
+X	153767520	.	C	G	.	.	.
+X	153767955	.	G	C	.	.	.
+X	153768129	.	G	A	.	.	.
+X	153768269	.	T	G	.	.	.
+X	153768364	.	T	G	.	.	.
+X	153771087	.	T	A	.	.	.
+X	153771654	.	G	A	.	.	.
+X	153773751	.	G	T	.	.	.
+X	153774014	.	C	A	.	.	.
+X	153775710	.	G	T	.	.	.

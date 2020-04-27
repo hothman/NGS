@@ -1,0 +1,33 @@
+##fileformat=VCFv4.2
+##fileDate=20200427
+##source=vcfy 0.0.8
+##reference=/home/houcemeddine/BILIM/random_mutation/refgenome/Homo_sapiens.GRCh37.dna.chromosome.8.fa
+##phasing=none
+##commandline="vcfy -m 0.001 -r '8' -l 11700033 -h 11725646"
+##contig=<ID=8,length=146364022>
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+8	11700245	.	A	G	.	.	.
+8	11702613	.	G	C	.	.	.
+8	11703970	.	G	T	.	.	.
+8	11704767	.	C	A	.	.	.
+8	11705002	.	G	C	.	.	.
+8	11705056	.	C	A	.	.	.
+8	11706057	.	G	A	.	.	.
+8	11706464	.	C	T	.	.	.
+8	11707464	.	T	C	.	.	.
+8	11707511	.	G	T	.	.	.
+8	11707717	.	G	A	.	.	.
+8	11708124	.	G	A	.	.	.
+8	11708502	.	A	C	.	.	.
+8	11708520	.	C	T	.	.	.
+8	11709357	.	G	C	.	.	.
+8	11709711	.	C	G	.	.	.
+8	11711690	.	T	A	.	.	.
+8	11712782	.	G	C	.	.	.
+8	11716710	.	G	A	.	.	.
+8	11716826	.	T	A	.	.	.
+8	11717735	.	A	C	.	.	.
+8	11717984	.	T	G	.	.	.
+8	11718837	.	G	T	.	.	.
+8	11722733	.	A	C	.	.	.
+8	11722962	.	G	A	.	.	.
