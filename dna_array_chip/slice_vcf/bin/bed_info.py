@@ -8,6 +8,9 @@ def readBed(file, upstream, downstream, output ):
 		attributes = bedfile.readlines()[0].split()
 		chr = attributes[0]
 		start = str(int(attributes[1]) - int(upstream) )  
+		if int(start) < 0:
+			start = str(1)
+		print(start)
 		end = str( int(attributes[2]) +  int(downstream) ) 
 		gene = attributes[3]
 		new_bed = '\t'.join([chr, start, end, gene])
