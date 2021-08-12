@@ -1,23 +1,24 @@
 #!/usr/bin/env nextflow
 
 // path to bed file containing list of genes to extract
-params.BED="../simulate_vcf/core_proper.bed"
+params.BED="all_ADME.bed"
 
-VCF = Channel.fromPath( '/home/houcem/tmp_science/coverage_chip/NGS/dna_array_chip/simulate_vcf/*.vcf.gz' )
-
+VCF = Channel.fromPath( '../simulate_vcf/*.vcf.gz' )
+params.INDEXHOME= 'simulate_vcf' 
 genes = Channel.fromPath("$params.BED").splitText()  { it.replaceAll("\n", "") }
 
 	//#bcftools view -r $chr:$start-$end $path_to_vcf -Oz -o $outputfile 
     //#tabix  $outputfile
 
-params.upstream_buffer = 1000
-params.downstream_buffer = 1000
+params.upstream_buffer = 1000000
+params.downstream_buffer = 1000000
 
 process getbed {
 	input: 
 		val gene from genes.flatMap() 
 	output: 
 		file("*_adme.bed") into bed_adme
+
 
 	"""
 	echo $gene > tmp.bed
@@ -28,68 +29,44 @@ process getbed {
 
 
 process sliceVCF {
-	conda 'bioconda::bedtools=2.30.0'
-	  
+	conda 'bioconda::bcftools'
+	errorStrategy 'ignore'
+	publishDir './sliced_vcfs' , mode: 'copy', overwrite: true
 	input: 
 		file bed from bed_adme
 		each file(vcf) from VCF
+
 	output: 
-		file("*_sliced.vcf") into sliced_vcfs
+		file("*_sliced.vcf.gz") optional true into sliced_vcfs
 
 	"""
 	gene_name=\$(awk {'print \$4'} $bed)
 	chromosome_id=\$(awk {'print \$1'} $bed)
-	intersectBed -a $vcf -b $bed -header >\${gene_name}_chr\${chromosome_id}_sliced.vcf
+	chromosome_in_vcf=\$(bcftools query -f '%CHROM\n' $vcf | uniq)
+	ln -s ${params.INDEXHOME}/${vcf}.tbi
+	if [ \$chromosome_id -eq \$chromosome_in_vcf ]
+	then
+		bcftools view  -R $bed -O z $vcf -o  \${gene_name}_chr\${chromosome_id}_sliced.vcf.gz
+		
+	fi
+	
 	"""
 }
 
 
-process verifySizeOfVCF {
-	errorStrategy 'ignore'  // isVcfEmpty.py returns exit status 1 if empty
-
-	input: 
-		file(vcf) from sliced_vcfs
-	output: 
-		path("*.vcf", includeInputs:true) into sliced_non_empty_vcfs  
-
-	"""
-	bcftools stats $vcf >file.stats
-	isVcfEmpty.py --stats file.stats
-	"""
-
-}
 
 process compressIndex {
-	conda 'bioconda::tabix=1.11'
+	conda 'bioconda::bcftools'
 	publishDir './sliced_vcfs' , mode: 'move', overwrite: true
 
 	input:
-		file(vcf) from sliced_non_empty_vcfs
+		file(vcf) from sliced_vcfs
 	output:
-		file("*.vcf.gz") into compressedVcf
 		file("*.tbi") into indexes
 
 	"""
-	bgzip  $vcf 
-	tabix ${vcf}.gz
+	bcftools index $vcf -t 
+
 	"""
 }
 
-/*
-process annotatedbSNP {
-	conda 'bioconda::gatk4=4.2.0.0'
-
-	input:
-		file(vcf) from compressedVcf
-		file(index) from indexes
-
-	"""
-	bcftools annotate -c ID \
--a ~/var-calling/reference_data/dbsnp.138.chr20.vcf.gz \
-~/var-calling/results/variants/na12878_q20.recode.vcf.gz \
-> ~/var-calling/results/annotation/na12878_q20_annot.vcf
-	"""
-
-
-}
-*/
