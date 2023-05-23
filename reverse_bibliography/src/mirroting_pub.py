@@ -1,6 +1,7 @@
 from metapub import PubMedFetcher
 from tqdm import tqdm
 from random import randint
+import argparse
 
 
 class readList(object):
@@ -46,13 +47,19 @@ class mirroringPubmed(object):
 
 
 if __name__ == "__main__":
-    list = readList("../data/pmids.txt")
+    parser = argparse.ArgumentParser(
+        description="Given a list of PMIDs, returns random articles sampled from the same date")
+    parser.add_argument("--pmids", help="A file containing a list of pmids")
+    parser.add_argument("--output", help="Output file")
+    args = parser.parse_args()
+
+    list = readList(args.pmids)
     list.readPmids()
     years_to_replicate = list.getYears()
     pmids_to_replicate = list.pmids
     replicate_years = mirroringPubmed(years_to_replicate)
     replicated_pmids = replicate_years.fetcher(
         negative_pmids=pmids_to_replicate)
-    with open("negative_pmids.txt", "w") as output:
+    with open(args.output, "w") as output:
         for pmid in replicated_pmids:
             output.write(pmid+"\n")
