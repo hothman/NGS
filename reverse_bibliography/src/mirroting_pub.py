@@ -1,6 +1,7 @@
 from metapub import PubMedFetcher
 from tqdm import tqdm
 from random import randint
+import time
 import argparse
 
 
@@ -30,8 +31,11 @@ class mirroringPubmed(object):
         ran = randint(0, 1000)
         return list_of_articles[ran]
 
-    def fetcher(self, negative_pmids, n_samples=2):
-        replicated_pmids = []
+    def _writeOutput(self, output, pmid):
+        with open(output, "a") as myoutput:
+            myoutput.writelines(str(pmid).strip()+"\n")
+
+    def fetcher(self, negative_pmids, theoutput, n_samples=2):
         fetch = PubMedFetcher()
         for year in tqdm(self.years):
             query = year+"[DP] NOT 'Pharmacogenetics'[Mesh] NOT review[PT]"
@@ -41,9 +45,9 @@ class mirroringPubmed(object):
                 selected = self._sampleFromList(my_hits)
                 while selected in negative_pmids:
                     selected = self._sampleFromList(my_hits)
-                replicated_pmids.append(selected)
+                self._writeOutput(theoutput, selected)
+                time.sleep(1)
                 i += 1
-        return replicated_pmids
 
 
 if __name__ == "__main__":
@@ -58,8 +62,5 @@ if __name__ == "__main__":
     years_to_replicate = list.getYears()
     pmids_to_replicate = list.pmids
     replicate_years = mirroringPubmed(years_to_replicate)
-    replicated_pmids = replicate_years.fetcher(
-        negative_pmids=pmids_to_replicate)
-    with open(args.output, "w") as output:
-        for pmid in replicated_pmids:
-            output.write(pmid+"\n")
+    replicated_pmids = replicate_years.fetcher(negative_pmids=pmids_to_replicate,
+                                               theoutput=args.output)
